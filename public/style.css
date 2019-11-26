@@ -1,0 +1,8 @@
+.article-append, .article-saved {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card.indexcard {
+    margin: 20px;
+}
