@@ -26,7 +26,7 @@ mongoose.connect("mongodb://localhost/propertyarticle", { useNewUrlParser: true 
 app.get("/scrape", function (req, res) {
     console.log("scrape begin");
 
-    for (i = 10; i < 12; i++) {
+    for (i = 1; i < 2; i++) {
         axios.get("https://www.domain.com.au/news/nsw/page/" + i).then(function (response) {
 
             var $ = cheerio.load(response.data);
@@ -78,10 +78,17 @@ app.get("/scrape", function (req, res) {
 
 app.get("/articles", function (req, res) {
     // Finish the route so it grabs all of the articles
+
+    var data = {};
+
     db.Article.find({ save_article: false })
-        .then(function (data) {
-            res.json(data)
+        .then(function (result) {
+            data.push(result)
+            db.Note.find({ save_article: false })
+                .then(function (result) {
+                })
         })
+
 
 });
 
@@ -105,6 +112,14 @@ app.post("/save/article", function (req, res) {
     });
 
 });
+
+app.post("/save/note", function (req, res) {
+    db.Note.create(req.body)
+        .then(function (note) {
+            res.json("it works");
+        })
+});
+
 app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
 });
